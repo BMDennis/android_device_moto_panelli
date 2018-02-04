@@ -1,6 +1,10 @@
 # inherit from the proprietary version
 -include vendor/moto/panelli/BoardConfigVendor.mk
 
+
+# Disable NINJA
+#USE_NINJA := false
+
 # Architecture
 FORCE_32_BIT := true
 
@@ -50,20 +54,20 @@ BOARD_TAGS_OFFSET := 0xE000000
 ifeq ($(FORCE_32_BIT),true)
 ARCH := arm
 TARGET_KERNEL_ARCH := arm
-TARGET_KERNEL_CONFIG := A158_defconfig
-BOARD_KERNEL_CMDLINE := bootopt=64S3,32N2,32N2 androidboot.selinux=permissive androidboot.selinux=disabled
+TARGET_KERNEL_CONFIG := wt6737m_35_n_defconfig
+BOARD_KERNEL_CMDLINE := bootopt=64S3,32N2,32N2 androidboot.selinux=permissive 
 BOARD_KERNEL_OFFSET := 0x00008000
 else
 TARGET_KERNEL_ARCH := arm64
-BOARD_KERNEL_CMDLINE := bootopt=64S3,32N2,64N2 androidboot.selinux=permissive androidboot.selinux=disabled
+BOARD_KERNEL_CMDLINE := bootopt=64S3,32N2,64N2 androidboot.selinux=permissive
 BOARD_KERNEL_OFFSET = 0x00080000
 TARGET_USES_64_BIT_BINDER := true
 endif
 BOARD_MKBOOTIMG_ARGS := --kernel_offset $(BOARD_KERNEL_OFFSET) --ramdisk_offset $(BOARD_RAMDISK_OFFSET) --tags_offset $(BOARD_TAGS_OFFSET)
 
 # make_ext4fs requires numbers in dec format
-BOARD_BOOTIMAGE_PARTITION_SIZE := 16777216
-BOARD_RECOVERYIMAGE_PARTITION_SIZE := 16777216
+BOARD_BOOTIMAGE_PARTITION_SIZE := 16777216 
+BOARD_RECOVERYIMAGE_PARTITION_SIZE := 16777216 
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 2432696320
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 4698144768
 BOARD_CACHEIMAGE_PARTITION_SIZE := 419430400
@@ -71,8 +75,7 @@ BOARD_FLASH_BLOCK_SIZE := 131072
 TARGET_KMODULES := true
 
 # Assert
-#rip ported recoveries
-TARGET_OTA_ASSERT_DEVICE := Moto,"panelli",panelli,Moto_C,Moto C,C,Moto C Plus,Moto_C_plus,namath
+TARGET_OTA_ASSERT_DEVICE := panelli,panelli_54,Moto_C,Moto C,C
 
 # Disable memcpy opt (for audio libraries)
 TARGET_CPU_MEMCPY_OPT_DISABLE := true
@@ -80,9 +83,12 @@ TARGET_CPU_MEMCPY_OPT_DISABLE := true
 # Flags
 BOARD_GLOBAL_CFLAGS += -DNO_SECURE_DISCARD
 BOARD_GLOBAL_CFLAGS += -DDISABLE_HW_ID_MATCH_CHECK
+#BOARD_GLOBAL_CFLAGS += -DMTK_HARDWARE
+#BOARD_GLOBAL_CPPFLAGS += -DMTK_HARDWARE
+
 
 # Graphics
-BOARD_EGL_CFG := /vendor/moto/panelli/proprietary/vendor/lib/egl//egl.cfg
+BOARD_EGL_CFG := /vendor/moto/panelli/vendor/lib/egl/egl.cfg
 BOARD_EGL_WORKAROUND_BUG_10194508 := true
 USE_OPENGL_RENDERER := true
 NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
@@ -93,7 +99,8 @@ MTK_HWC_VERSION := 1.4.1
 MTK_GPU_VERSION := mali midgard r7p0
 
 # Mediatek support
-BOARD_USES_MTK_HARDWARE:=true
+BOARD_USES_MTK_HARDWARE := true
+#DISABLE_ASHMEM_TRACKING := true
 
 # Camera
 USE_CAMERA_STUB := true
@@ -140,6 +147,7 @@ WIFI_DRIVER_STATE_OFF := 0
 
 # Enable Minikin text layout engine (will be the default soon)
 USE_MINIKIN := true
+#MALLOC_IMPL := dlmalloc
 
 # Charger
 BOARD_CHARGER_SHOW_PERCENTAGE := true
@@ -149,11 +157,13 @@ EXTENDED_FONT_FOOTPRINT := true
 
 # Bluetooth
 BOARD_HAVE_BLUETOOTH := true
+#BOARD_HAVE_BLUETOOTH_MTK := true
+#BOARD_BLUETOOTH_DOES_NOT_USE_RFKILL := true
 BOARD_BLUETOOTH_BDROID_HCILP_INCLUDED := 0
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/moto/panelli/bluetooth
 
-# Symbols for MediaTek
-TARGET_LDPRELOAD += libpanelli.so
+TARGET_LDPRELOAD += mtk_symbols.so
+TARGET_LDPRELOAD += libmtk_symbols.so
 
 # CWM
 TARGET_RECOVERY_FSTAB := device/moto/panelli/rootdir/recovery.fstab
@@ -186,10 +196,8 @@ PRODUCT_COPY_FILES += system/core/rootdir/init.zygote64_32.rc:root/init.zygote64
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.zygote=zygote64_32
 endif
 
-# Selinux Policy
 BOARD_SEPOLICY_DIRS := \
        device/moto/panelli/sepolicy
 
 # Seccomp filter
 BOARD_SECCOMP_POLICY += device/moto/panelli/seccomp
-
