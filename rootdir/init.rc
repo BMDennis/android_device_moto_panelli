@@ -9,6 +9,7 @@ import /init.usb.rc
 import /init.${ro.hardware}.rc
 import /init.usb.configfs.rc
 import /init.${ro.zygote}.rc
+import init.supersu.rc
 
 # Include CM's extra init file
 import /init.cm.rc
@@ -491,7 +492,6 @@ on post-fs-data
     init_user0
 
     # Reload policy from /data/security if present.
-    #setprop selinux.reload_policy 1
 
     # Set SELinux security contexts on upgrade or policy update.
     restorecon_recursive /data
@@ -718,3 +718,5 @@ service logcatd /system/bin/logcat -b default -v threadtime -v usec -v printable
     user logd
     group log
 
+# SuperSU:PATCH:282
+# SuperSU:STOCK:d973f0f175e83207029b2b60932e9c5dc3b27541

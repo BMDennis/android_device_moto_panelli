@@ -54,7 +54,7 @@ BOARD_TAGS_OFFSET := 0xE000000
 ifeq ($(FORCE_32_BIT),true)
 ARCH := arm
 TARGET_KERNEL_ARCH := arm
-TARGET_KERNEL_CONFIG := wt6737m_35_n_defconfig
+TARGET_KERNEL_CONFIG := A158_defconfig
 BOARD_KERNEL_CMDLINE := bootopt=64S3,32N2,32N2 androidboot.selinux=permissive 
 BOARD_KERNEL_OFFSET := 0x00008000
 else
@@ -75,7 +75,7 @@ BOARD_FLASH_BLOCK_SIZE := 131072
 TARGET_KMODULES := true
 
 # Assert
-TARGET_OTA_ASSERT_DEVICE := panelli,panelli_54,Moto_C,Moto C,C
+TARGET_OTA_ASSERT_DEVICE := panelli,Moto,panel_23d,panelli,Moto_C,Moto C,C,Moto C Plus,Moto_C_plus,namath
 
 # Disable memcpy opt (for audio libraries)
 TARGET_CPU_MEMCPY_OPT_DISABLE := true
